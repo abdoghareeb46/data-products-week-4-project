@@ -1,0 +1,67 @@
+---
+title: Developing Data Products course - Assignment Week 4 - Shiny Application and
+  Reproducible Pitch
+author: "Abdo Ghareeb"
+date: "April 6, 2019"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+ - This presentation is one half of the assignemnt of week 4, ***Developing Data Products course from Coursera*** (<https://www.coursera.org/learn/data-products>). 
+ 
+ - The presentation is meant to show information about the second half of the above mentioned assignment (a development project). 
+
+ - The presentation was generated using ***RStudio***(<https://www.rstudio.com>) and ***Slidify***(<http://slidify.org>) framework.
+
+## Application
+ 
+
+ - This application shows an example of making a web application using R and [Shiny](https://shiny.rstudio.com) framework together.
+ 
+ - In the application, a prediction model is generated, based on a car parameters dataset (HP, weight, gears, etc.). Then, a user can play freely with the UI values in order to simulate the parameters of an hypothetical car and be able to predict its MPG consumption.
+ 
+
+  
+## Dataset
+
+Dataset used by the application is the [Motor Trend Car Road Tests](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html) (from now on *'mtcars'*). The data was extracted from the ***1974 Motor Trend*** US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models).
+
+Next, the dataset structure: 
+```{r cars, echo = TRUE}
+str(mtcars)
+```
+
+## Prediction
+
+A Random Forest prediction model is generated and trained using the *'mtcars'* dataset. The goal of this model is to predict the fuel consumption (***mpg*** variable) based on the rest of the variables:
+```{r echo = FALSE}
+suppressWarnings(suppressMessages(library(caret)))
+suppressWarnings(suppressMessages(library(randomForest)))
+
+set.seed(210915)
+
+```
+
+```{r echo = TRUE}
+customTrainControl <- trainControl(method = "cv", number = 10)
+carsRandomForestModelBuilder <- function() {
+  return(
+    train(
+      mpg ~ ., 
+      data = mtcars,
+      method = "rf",
+      trControl = customTrainControl
+    )
+  )
+}
+
+carsRandomForestModelBuilder()
+```
+
